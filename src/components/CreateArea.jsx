@@ -1,0 +1,73 @@
+import React, { useState } from "react";
+import Fab from '@mui/material/Fab';
+import Zoom from '@mui/material/Zoom';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+
+
+function CreateArea(props) {
+  const [isExpanded, setExpanded] = useState(false);
+
+  const [note, setNote] = useState({
+    title: "",
+    content: ""
+  });
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setNote(prevNote => {
+      return {
+        ...prevNote,
+        [name]: value
+      };
+    });
+
+  }
+
+  function submitNote(event) {
+    if(note.title!=="") {props.onAdd(note);
+    setNote({
+      title: "",
+      content: ""
+    });
+    event.preventDefault();
+    contract();} else {
+      alert("Please Specify A Title!!")
+    }
+  };
+
+  function expand() {
+    setExpanded(true);
+  }
+  function contract() {
+    setExpanded(false);
+  }
+
+  return (
+    <div>
+      <form className="create-note">
+        {isExpanded && (
+          <input
+            name="title"
+            onChange={handleChange}
+            value={note.title}
+            placeholder="Title"
+          />
+        )}        <textarea
+          onClick={expand}
+          onChange={handleChange}
+          name="content"
+          placeholder="Scribble"
+          rows={isExpanded ? 3 : 1}
+          value={note.content} />
+        <Zoom in={isExpanded}>
+          <Fab onClick={submitNote}>
+            <NoteAddIcon></NoteAddIcon>
+          </Fab>
+        </Zoom>
+      </form>
+    </div>
+  );
+}
+
+export default CreateArea;
